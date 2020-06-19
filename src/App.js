@@ -1,23 +1,29 @@
 import React from 'react';
 import './App.css';
-import './store';
+import store from './store';
 class App extends React.PureComponent {
   state = {
     count: 0
   }
   componentDidMount() {
-    // const store = createStore();
-    // console.log(store.getState());
-    this.setState({
-      // count: store.getState().count
+    store.subscribe(() => {
+      this.forceUpdate()
     })
   }
+
+  plusCount = () => {
+    store.dispatch({ type: 'plus' })
+  }
+  subtractCount = () => {
+    store.dispatch({ type: 'subtract' })
+  }
   render() {
-    // const { count } = this.state;
     return (
       <div className="App">
         <h1>redux</h1>
-        {/* {count} */}
+        <button onClick={this.plusCount}>plus</button>
+        <button onClick={this.subtractCount}>subtract</button>
+        <p>{store.getState().count}</p>
       </div>
     );
   }

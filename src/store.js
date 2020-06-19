@@ -39,7 +39,6 @@ const initialState = {
   count: 0,
 }
 const store = createStore(reducer, initialState);
-store.subscribe(() => { console.log('组件1收到更新') });
-store.subscribe(() => { console.log('组件2收到更新') });
-store.dispatch({ type: 'plus'});
-console.log(store.getState());
+
+
+export default store;
