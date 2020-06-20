@@ -1,11 +1,14 @@
-import reducer from './reducer';
+
 /**
  * 要存取状态就要有 getter 和 setter，对应 getStore 和 dispatch
  * 当状态发生改变，需要通知组件进行更新，用到观察者模式
  * 多个观察者对象监听同一目标对象，当目标对象的状态发生了变化通知所有观察者对象自动更新
  * 
  */
-export function createStore(reducer, initialState) {
+export function createStore(reducer, initialState, enhancer) {
+  if (typeof enhancer === 'function') {
+    return enhancer(createStore)(reducer, initialState)
+  }
   let currentState = initialState;           // 全局状态
   let listeners = [];         // 观察者对象
   let isDispatching = false;
@@ -35,10 +38,10 @@ export function createStore(reducer, initialState) {
     subscribe,
   }
 }
-const initialState = {
-  count: 0,
+
+// applyMiddleWare 函数接收若干个中间件，执行的返回结果是一个函数，用来接收 createStore
+export function applyMiddleWare(...middleWares) {
+  return function(createStore) {
+
+  }
 }
-const store = createStore(reducer, initialState);
-
-
-export default store;
