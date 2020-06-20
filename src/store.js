@@ -52,13 +52,17 @@ export function applyMiddleWare(...middleWares) {
       let dispatch = oldStore.dispatch;
       // 传入 store，进行第一次调用
       const middleWareChain = middleWares.map(middleWare => middleWare(oldStore));
-      middleWareChain.reverse().forEach(middle => {
-        dispatch = middle(dispatch)
-      })
+      dispatch = compose(...middleWareChain)(dispatch)
       return {
         ...oldStore,
         dispatch,
       }
     }
   }
+}
+
+function compose(...funcs) {
+  if (funcs.length === 0) return () => {};
+  if (funcs.length === 1) return funcs[0];
+  return funcs.reduce((a, b) => (...args) => a(b(...args)));
 }

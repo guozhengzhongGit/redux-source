@@ -15,6 +15,11 @@ export default function reducer(prevState, action) {
         ...prevState,
         count: prevState.count - 1,
       }
+    case 'asyncPlus':
+      return {
+        ...prevState,
+        count: prevState.count + 1,
+      }
     default:
       return prevState;
   }
