@@ -39,9 +39,26 @@ export function createStore(reducer, initialState, enhancer) {
   }
 }
 
-// applyMiddleWare 函数接收若干个中间件，执行的返回结果是一个函数，用来接收 createStore
-export function applyMiddleWare(...middleWares) {
-  return function(createStore) {
+/**
+ * applyMiddleWare 函数接收若干个中间件作为参数
+ * 执行的返回结果是一个函数，对应 createStore 中的第三个参数 enhancer
+ * 用来接收旧的 createStore，返回一个新的 createStore，其内部的 dispatch 是经过增强的
+ */
 
+export function applyMiddleWare(...middleWares) {
+  return function enhancer(createStore) {
+    return function(reducer, initialState) {
+      const oldStore = createStore(reducer, initialState);
+      let dispatch = oldStore.dispatch;
+      // 传入 store，进行第一次调用
+      const middleWareChain = middleWares.map(middleWare => middleWare(oldStore));
+      middleWareChain.reverse().forEach(middle => {
+        dispatch = middle(dispatch)
+      })
+      return {
+        ...oldStore,
+        dispatch,
+      }
+    }
   }
 }
